@@ -1,0 +1,42 @@
+mkdir build; cd build
+cmake -G Ninja -DCMAKE_BUILD_TYPE=Debug ..
+ninja
+ctest -T memcheck
+cat Testing/Temporary/MemoryChecker.*.log
+
+==9389== Invalid free() / delete / delete[] / realloc()
+==9389==    at 0x4C3173B: operator delete[](void*) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==9389==    by 0x108D3A: SomeClass::~SomeClass() (SomeClass.h:13)
+==9389==    by 0x108C9D: main (main.cpp:5)
+==9389==  Address 0x5b82c80 is 0 bytes inside a block of size 1,024 free'd
+==9389==    at 0x4C3173B: operator delete[](void*) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==9389==    by 0x108D3A: SomeClass::~SomeClass() (SomeClass.h:13)
+==9389==    by 0x108C91: main (main.cpp:6)
+==9389==  Block was alloc'd at
+==9389==    at 0x4C3089F: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==9389==    by 0x108CDF: SomeClass::SomeClass() (SomeClass.h:7)
+==9389==    by 0x108C6D: main (main.cpp:5)
+==9389==
+==9389== Invalid free() / delete / delete[] / realloc()
+==9389==    at 0x4C3173B: operator delete[](void*) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==9389==    by 0x108D57: SomeClass::~SomeClass() (SomeClass.h:14)
+==9389==    by 0x108C9D: main (main.cpp:5)
+==9389==  Address 0x5b830c0 is 0 bytes inside a block of size 1,048,576 free'd
+==9389==    at 0x4C3173B: operator delete[](void*) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==9389==    by 0x108D57: SomeClass::~SomeClass() (SomeClass.h:14)
+==9389==    by 0x108C91: main (main.cpp:6)
+==9389==  Block was alloc'd at
+==9389==    at 0x4C3089F: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==9389==    by 0x108CF4: SomeClass::SomeClass() (SomeClass.h:8)
+==9389==    by 0x108C6D: main (main.cpp:5)
+==9389==
+
+Указатели на массив символов расшариваются между двумя объектами класса SomeClass,
+вызов дестуктора первого класса освобожает память этих двух массивов, и при вызове
+второго дестуктора пытаемся удалить уже удаленные структуры данных.
+
+Далее нужно действовать исходя из требований к стратегии владения данными.
+1. Ver3_1 - стратегия копирования.
+2. Ver3_2 - стратегия совместного доступа.
+
+В зависимости от задачи необходим выбор.

@@ -1,8 +1,8 @@
-$ mkdir build; cd build
-$ cmake -G Ninja -DCMAKE_BUILD_TYPE=Debug ..
-$ ninja
-$ ctest -T memcheck
-$ cat Testing/Temporary/MemoryChecker.*.log
+mkdir build; cd build
+cmake -G Ninja -DCMAKE_BUILD_TYPE=Debug ..
+ninja
+ctest -T memcheck
+cat Testing/Temporary/MemoryChecker.*.log
 
 ==8148== 1,024 bytes in 1 blocks are definitely lost in loss record 1 of 2
 ==8148==    at 0x4C3089F: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
