@@ -1,0 +1,23 @@
+mkdir build; cd build
+cmake -G Ninja -DCMAKE_BUILD_TYPE=Debug ..
+ninja
+ctest -T memcheck
+cat Testing/Temporary/MemoryChecker.*.log
+
+ctest -T memcheck
+   Site: glenstorm87
+   Build name: Linux-c++
+Memory check project /home/glenstorm87/devel/MemoryLeakTesting/SomeClassVer3_2/build
+    Start 1: example_test
+1/1 MemCheck #1: example_test .....................   Passed    0.71 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.71 sec
+-- Processing memory checking output:
+MemCheck log files can be found here: ( * corresponds to test number)
+/home/glenstorm87/devel/MemoryLeakTesting/SomeClassVer3_2/build/Testing/Temporary/MemoryChecker.*.log
+Memory checking results:
+
+С помощью умных указателей избегаем поведения во втором примере и обеспечиваем
+стратегию распределенного хранилища.

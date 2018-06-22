@@ -20,4 +20,4 @@ MemCheck log files can be found here: ( * corresponds to test number)
 /home/glenstorm87/devel/MemoryLeakTesting/SomeClassVer3_1/build/Testing/Temporary/MemoryChecker.*.log
 Memory checking results:
 
-Как видно никакой утечки нет
+Как видно никакой утечки нет, но конечно нужно учитывать еще размеры копируемых конетйнеров.
