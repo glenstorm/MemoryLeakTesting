@@ -1,0 +1,18 @@
+$ mkdir build; cd build
+$ cmake -G Ninja -DCMAKE_BUILD_TYPE=Debug ..
+$ ninja
+$ ctest -T memcheck
+$ cat Testing/Temporary/MemoryChecker.*.log
+
+==8148== 1,024 bytes in 1 blocks are definitely lost in loss record 1 of 2
+==8148==    at 0x4C3089F: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8148==    by 0x10897D: SomeClass::SomeClass() (SomeClass.h:7)
+==8148==    by 0x10893C: main (main.cpp:5)
+==8148==
+==8148== 1,048,576 bytes in 1 blocks are definitely lost in loss record 2 of 2
+==8148==    at 0x4C3089F: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8148==    by 0x108991: SomeClass::SomeClass() (SomeClass.h:8)
+==8148==    by 0x10893C: main (main.cpp:5)
+==8148==
+
+Как и следовало ожидать - утечка в указанных выше строках.
